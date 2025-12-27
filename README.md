@@ -1,7 +1,7 @@
 # palma
 <img width="1920" height="1080" alt="palma" src="https://github.com/user-attachments/assets/c0effdfc-5d02-41f4-86f0-59245b58b4c3" />
 
-Palma. Your companion to being a better you. A hackathon project.
+**Palma.** _Your companion to being a better you. A hackathon project._
 
 ## Why PALMA?
 Most health apps rely on aggressive metrics, constant reminders, and device-heavy tracking.
