@@ -23,13 +23,13 @@ Instead of punishing calories or constant alerts, PALMA:
 - uses reason instead of just metrics.
 - builds honesty & trust over time.
 
-We utilise Foot-in-the-Door technique and consistency bias: The idea being if the user commits to a "truthful persona" through easy, indirect questions, they are more likely to maintain that integrity when things get personal (like what they ate). Thus reducing the false reporting drastically.
+We utilise Foot-in-the-Door technique and consistency bias: The idea being if the user commits to a "truthful persona" through easy, indirect questions, they are more likely to maintain that integrity when things get personal (like what they ate). Thus helping reduce false reporting.
 
 
 ## Core Features
 - Calm onboarding with diet preferences and goals.
 - Daily reflection flow using _healthy_ questions.
-- Designed with emotional UX in mind, that is - to be heard.
+- Designed with emotional UX in mind. (focused on reflection, not judgment)
 - A daily Health Score based on consistency, value and balance, not perfection.
 - Food logging with positive framing (no red warnings).
 - Context-aware AI companion (non-medical use).
@@ -38,8 +38,8 @@ We utilise Foot-in-the-Door technique and consistency bias: The idea being if th
 ## Tech Stack
 Frontend: HTML, CSS, JavaScript  
 Backend: FastAPI  
-Database: Supabase (Postgres)  
-AI: Gemini 2.5 Flash API
+Database: Supabase (Postgres)
+API: Gemini 2.5 Flash API (free tier)
 
 ## Running locally
 1. Clone the repo
