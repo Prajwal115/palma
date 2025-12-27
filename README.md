@@ -33,13 +33,77 @@ We utilise Foot-in-the-Door technique and consistency bias: The idea being if th
 - A daily Health Score based on consistency, value and balance, not perfection.
 - Food logging with positive framing (no red warnings).
 - Context-aware AI companion (non-medical use).
-- Human-first and privary-first design.
+- Human-first and privacy-first design.
 
+## Target Users & Use Cases
+
+### Target Users
+- Health-conscious individuals who feel overwhelmed by traditional calorie tracking apps.
+- Users who value reflection, honesty, and long-term habit formation.
+- People _without_ consistent access to wearables or who prefer minimal tracking.
+
+### Use Cases
+- Daily food reflection without guilt or calorie pressure.
+- Gradual habit improvement through gentle nudges.
+- Honest self-reporting enabled by non-judgmental prompts.
+
+  
 ## Tech Stack
 Frontend: HTML, CSS, JavaScript  
 Backend: FastAPI  
 Database: Supabase (Postgres)
 API: Gemini 2.5 Flash API (free tier)
+
+## Why an Agentic System?
+
+PALMA is designed as an agentic system because the problem it addresses is not static.
+
+User behavior, honesty, and motivation evolve over time.
+A fixed-rule system or one-off chatbot cannot adapt to:
+- changing user consistency
+- fluctuating habits
+- emotional context
+
+PALMA’s agent observes patterns across reflections, food logs, and user responses,
+then plans gentle, context-aware responses rather than issuing direct instructions.
+
+_The agent’s role is not to control the user, but to adapt to them._
+
+## Agent Design
+
+### Reflection Agent
+**Goal:**
+- Encourage honest self-reflection.
+- Craft indirect, emotionally-intelligent questions to collect user data and discourage false reporting. 
+- Support gradual, sustainable dietary habits.
+
+**Responsibilities:**
+- Analyze user reflections and food logs.
+- Detect consistency and balance trends.
+
+**Constraints:**
+- No medical diagnosis or treatment advice
+- No calorie shaming or fear-based feedback
+- No forced notifications or intrusive interventions
+- Operates only within user-provided data
+
+## Demonstration of Agentic Behavior
+
+Example:
+- If a user frequently logs high-calorie meals but remains consistent and honest, the agent avoids negative feedback and instead suggests balance over restriction.
+  It tries to connect the past responses of the indirect questions to the food habits. Like "consider reducing fats to feel better and lighter during the evenings."
+- If user engagement drops, the agent reduces intervention frequency.
+
+This demonstrates autonomous decision-making under constraints.
+
+## System Architecture & Workflow
+
+1. User completes onboarding and sets preferences.
+2. Daily reflection flow collects indirect, low-pressure inputs.
+3. Reflection Agent evaluates patterns over time.
+4. Agent plans a goal-aligned yet personal response.
+5. AI companion communicates context-aware feedback.
+6. Health Score is updated based on consistency and balance.
 
 ## Running locally
 1. Clone the repo
@@ -47,9 +111,19 @@ API: Gemini 2.5 Flash API (free tier)
 3. Run FastAPI server
 4. Open frontend in browser
 
+## Limitations & Future Improvements
+
+### Limitations
+- Relies on self-reported data.
+- Not intended for medical use.
+- Prototype-level personalization.
+
+### Future Improvements
+- Mobile application.
+- More adaptive long-term planning.
+
 ## Project Status
 Hackathon prototype – **under development.**
-(Future Plan: A Mobile Application)
 
 ## Project by Prajwal .
 _(also known as RealJupiter05/ Innovative Challenger)_
