@@ -92,7 +92,6 @@ _The agent’s role is not to control the user, but to adapt to them._
 Example:
 - If a user frequently logs high-calorie meals but remains consistent and honest, the agent avoids negative feedback and instead suggests balance over restriction.
   It tries to connect the past responses of the indirect questions to the food habits. Like "consider reducing fats to feel better and lighter during the evenings."
-- If user engagement drops, the agent reduces intervention frequency.
 
 This demonstrates autonomous decision-making under constraints.
 
