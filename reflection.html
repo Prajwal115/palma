@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Reflection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #008080;
+            --dark-teal: #07323E;
+            --bg-color: #f8fafc;
+            --card-bg: #f8fafc;
+            --text-main: #1a1a1a;
+            --transition-speed: 0.8s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Preloader Styles */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--dark-teal);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: transform var(--transition-speed) cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        .preloader-content {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-initial, .logo-full {
+            position: absolute;
+            transition: opacity 0.4s ease;
+        }
+
+        .logo-full {
+            opacity: 0;
+        }
+
+        #preloader.wipe-active .logo-initial {
+            opacity: 0;
+        }
+
+        #preloader.wipe-active .logo-full {
+            opacity: 1;
+        }
+
+        #preloader.exit {
+            transform: translateY(-100%);
+        }
+
+        header {
+            padding: 30px 40px;
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .reflection-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .reflection-container {
+            width: 100%;
+            max-width: 800px;
+            min-height: 600px;
+            background: var(--card-bg);
+            padding: 50px;
+            border-radius: 20px;
+            transform: translateY(-10%);
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .progress-dots {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 50px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            transition: background-color 0.3s ease;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: var(--primary-teal);
+            width: 24px;
+            border-radius: 6px;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 40px;
+            color: var(--dark-teal);
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        h2 {
+            font-size: 18px;
+            color: var(--dark-teal);
+            text-align: left;
+            margin: 30px 0 15px;
+            font-weight: 600;
+        }
+
+        /* Food Selection Grid */
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .food-btn {
+            padding: 15px 10px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 60px;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .food-btn:hover {
+            border-color: #cbd5e1;
+        }
+
+        .food-btn.selected {
+            background-color: #f0fdfa;
+            border-color: var(--primary-teal);
+            color: var(--primary-teal);
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 128, 128, 0.1);
+        }
+
+        .question-box {
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .rating-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin: 20px 0;
+        }
+
+        .range-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 14px;
+            border-radius: 5px;
+            background: #e2e8f0;
+            outline: none;
+        }
+
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--primary-teal);
+            cursor: pointer;
+            border: 4px solid white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        }
+
+        .range-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .boolean-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .bool-btn {
+            padding: 18px 50px;
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            background: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 140px;
+        }
+
+        .bool-btn.selected {
+            border-color: var(--primary-teal);
+            background-color: #f0fdfa;
+            color: var(--primary-teal);
+        }
+
+        .nav-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 60px;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 18px;
+            border-radius: 20px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .prev-btn {
+            background: white;
+            border: 2px solid #e2e8f0;
+            color: #64748b;
+        }
+
+        .next-btn {
+            background: var(--primary-teal);
+            border: none;
+            color: white;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 128, 128, 0.1);
+            border-left-color: var(--primary-teal);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .hidden { display: none; }
+        #error-message { background: #fee2e2; color: #b91c1c; padding: 15px; border-radius: 12px; margin-bottom: 20px; display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="preloader-content">
+            <div class="logo-initial">
+                <svg width="77" height="76" viewBox="0 0 77 76" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="36.617" cy="37.3089" r="28.5272" fill="#D0E6E3"/>
+                    <path d="M14.2024 35.309C16.0573 31.6622 21.2669 31.6622 23.1218 35.309V35.309V35.309C25.3525 38.7387 22.7477 43.2504 18.6621 43.0334V43.0334V43.0334C14.5765 43.2504 11.9716 38.7387 14.2024 35.309V35.309V35.309Z" fill="#07323E"/>
+                    <path d="M54.0647 15.838C58.2891 15.838 62.0531 16.7587 65.3568 18.6001C68.7147 20.4415 71.3414 23.0412 73.237 26.399C75.1326 29.7569 76.0804 33.6293 76.0804 38.0162C76.0804 42.4031 75.1326 46.3025 73.237 49.7146C71.3414 53.0724 68.7147 55.6721 65.3568 57.5135C62.0531 59.3549 58.2891 60.2756 54.0647 60.2756C48.2155 60.2756 43.5849 58.3259 40.1729 54.4264V75.4672H30.018V16.3254H39.6854V22.0122C41.3644 19.9541 43.4224 18.4106 45.8596 17.3816C48.3509 16.3525 51.0859 15.838 54.0647 15.838ZM52.9273 51.583C56.6643 51.583 59.7243 50.3374 62.1073 47.8461C64.5445 45.3547 65.763 42.0781 65.763 38.0162C65.763 33.9542 64.5445 30.6776 62.1073 28.1863C59.7243 25.695 56.6643 24.4493 52.9273 24.4493C50.4902 24.4493 48.2967 25.018 46.347 26.1553C44.3973 27.2385 42.8537 28.8091 41.7164 30.8672C40.579 32.9252 40.0104 35.3082 40.0104 38.0162C40.0104 40.7241 40.579 43.1071 41.7164 45.1652C42.8537 47.2232 44.3973 48.8209 46.347 49.9583C48.2967 51.0414 50.4902 51.583 52.9273 51.583Z" fill="#07323E"/>
+                </svg>
+            </div>
+            <div class="logo-full">
+<svg width="317" height="87" viewBox="0 0 317 87" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M111.384 27.3812C114.718 27.3812 117.689 28.1078 120.296 29.5609C122.945 31.0141 125.018 33.0656 126.514 35.7154C128.01 38.3652 128.758 41.4211 128.758 44.883C128.758 48.3448 128.01 51.422 126.514 54.1146C125.018 56.7644 122.945 58.8159 120.296 60.2691C117.689 61.7222 114.718 62.4488 111.384 62.4488C106.769 62.4488 103.114 60.9102 100.422 57.8329V74.4371H92.4083V27.7659H100.037V32.2535C101.362 30.6294 102.986 29.4114 104.91 28.5993C106.876 27.7873 109.034 27.3812 111.384 27.3812ZM110.487 55.5891C113.436 55.5891 115.851 54.6061 117.731 52.6401C119.655 50.6741 120.616 48.0884 120.616 44.883C120.616 41.6775 119.655 39.0918 117.731 37.1258C115.851 35.1598 113.436 34.1768 110.487 34.1768C108.564 34.1768 106.833 34.6255 105.294 35.5231C103.756 36.3779 102.537 37.6173 101.64 39.2414C100.742 40.8655 100.294 42.746 100.294 44.883C100.294 47.0199 100.742 48.9004 101.64 50.5245C102.537 52.1486 103.756 53.4094 105.294 54.3069C106.833 55.1617 108.564 55.5891 110.487 55.5891ZM171.105 55.8456C172.173 55.8456 173.178 55.6532 174.118 55.2686L173.285 61.6153C171.789 62.171 170.122 62.4488 168.284 62.4488C166.019 62.4488 164.138 61.9786 162.642 61.0384C161.147 60.0554 160.142 58.7091 159.629 56.9995C158.091 58.7518 156.253 60.0981 154.116 61.0384C152.022 61.9786 149.671 62.4488 147.064 62.4488C144.243 62.4488 141.679 61.8504 139.371 60.6537C137.106 59.457 135.311 57.7261 133.986 55.4609C132.661 53.153 131.998 50.4604 131.998 47.3832C131.998 43.5794 132.832 40.1603 134.499 37.1258C136.208 34.0486 138.516 31.6552 141.422 29.9456C144.371 28.236 147.662 27.3812 151.295 27.3812C156.766 27.3812 160.655 29.1977 162.963 32.8305L163.925 27.7659H171.938L167.322 50.781C167.194 51.2938 167.13 51.7853 167.13 52.2555C167.13 53.4094 167.472 54.3069 168.156 54.948C168.84 55.5464 169.823 55.8456 171.105 55.8456ZM149.116 55.5891C151.381 55.5891 153.389 55.0549 155.142 53.9864C156.937 52.8752 158.347 51.3579 159.373 49.4347C160.399 47.4687 160.912 45.2462 160.912 42.7674C160.912 40.0748 160.121 37.9806 158.54 36.4847C156.958 34.9461 154.736 34.1768 151.872 34.1768C149.607 34.1768 147.577 34.7324 145.782 35.8436C144.03 36.9121 142.641 38.4293 141.615 40.3953C140.589 42.3186 140.076 44.5197 140.076 46.9985C140.076 49.6911 140.867 51.8067 142.448 53.3453C144.03 54.8412 146.252 55.5891 149.116 55.5891ZM189.849 62.3847C184.164 62.3847 181.044 59.222 180.489 52.8966L177.476 54.6916L175.873 49.9475L181.258 46.2292L183.758 31.2278C184.613 26.3128 186.173 22.6372 188.438 20.2011C190.703 17.7649 193.353 16.5469 196.388 16.5469C198.867 16.5469 200.79 17.3162 202.158 18.8548C203.568 20.3934 204.273 22.5517 204.273 25.3298C204.273 28.3642 203.482 31.2705 201.901 34.0486C200.32 36.8266 198.461 39.2841 196.324 41.4211C194.229 43.5153 191.772 45.695 188.951 47.9602C188.823 48.8577 188.759 49.6484 188.759 50.3322C188.759 53.1957 189.977 54.6275 192.413 54.6275C193.823 54.6275 195.148 54.1787 196.388 53.2812C197.627 52.3409 198.888 51.1229 200.17 49.627L203.568 53.8582C199.935 59.5425 195.362 62.3847 189.849 62.3847ZM190.362 39.4978C192.413 37.4463 194.187 35.1812 195.683 32.7023C197.221 30.2234 197.99 27.83 197.99 25.5221C197.99 24.6246 197.82 23.9194 197.478 23.4065C197.136 22.8509 196.687 22.5731 196.131 22.5731C194.208 22.5731 192.819 25.1161 191.964 30.202L190.362 39.4978ZM251.945 27.3812C256.262 27.3812 259.681 28.6421 262.202 31.1637C264.724 33.6425 265.985 37.3822 265.985 42.3827V62H257.971V43.4084C257.971 40.4167 257.309 38.1729 255.984 36.677C254.659 35.1384 252.757 34.3691 250.278 34.3691C247.586 34.3691 245.427 35.2666 243.803 37.0617C242.179 38.814 241.367 41.3356 241.367 44.6265V62H233.353V43.4084C233.353 40.4167 232.691 38.1729 231.366 36.677C230.041 35.1384 228.139 34.3691 225.66 34.3691C222.925 34.3691 220.745 35.2453 219.121 36.9976C217.54 38.7499 216.749 41.2929 216.749 44.6265V62H208.736V27.7659H216.365V32.1253C217.647 30.5867 219.25 29.4114 221.173 28.5993C223.096 27.7873 225.233 27.3812 227.584 27.3812C230.148 27.3812 232.413 27.8728 234.379 28.8558C236.388 29.796 237.969 31.2064 239.123 33.0869C240.534 31.2919 242.35 29.9029 244.573 28.9199C246.795 27.8941 249.252 27.3812 251.945 27.3812ZM309.69 55.8456C310.759 55.8456 311.763 55.6532 312.703 55.2686L311.87 61.6153C310.374 62.171 308.707 62.4488 306.869 62.4488C304.604 62.4488 302.724 61.9786 301.228 61.0384C299.732 60.0554 298.727 58.7091 298.215 56.9995C296.676 58.7518 294.838 60.0981 292.701 61.0384C290.607 61.9786 288.256 62.4488 285.649 62.4488C282.828 62.4488 280.264 61.8504 277.956 60.6537C275.691 59.457 273.896 57.7261 272.571 55.4609C271.246 53.153 270.584 50.4604 270.584 47.3832C270.584 43.5794 271.417 40.1603 273.084 37.1258C274.793 34.0486 277.101 31.6552 280.008 29.9456C282.957 28.236 286.248 27.3812 289.88 27.3812C295.351 27.3812 299.24 29.1977 301.548 32.8305L302.51 27.7659H310.523L305.908 50.781C305.779 51.2938 305.715 51.7853 305.715 52.2555C305.715 53.4094 306.057 54.3069 306.741 54.948C307.425 55.5464 308.408 55.8456 309.69 55.8456ZM287.701 55.5891C289.966 55.5891 291.975 55.0549 293.727 53.9864C295.522 52.8752 296.932 51.3579 297.958 49.4347C298.984 47.4687 299.497 45.2462 299.497 42.7674C299.497 40.0748 298.706 37.9806 297.125 36.4847C295.543 34.9461 293.321 34.1768 290.457 34.1768C288.192 34.1768 286.162 34.7324 284.367 35.8436C282.615 36.9121 281.226 38.4293 280.2 40.3953C279.174 42.3186 278.661 44.5197 278.661 46.9985C278.661 49.6911 279.452 51.8067 281.033 53.3453C282.615 54.8412 284.837 55.5891 287.701 55.5891Z" fill="#D0E6E3"/>
+<circle cx="36.617" cy="48.0743" r="28.5272" fill="#D0E6E3"/>
+<path d="M14.2024 46.0743C16.0573 42.4276 21.2669 42.4276 23.1218 46.0743V46.0743V46.0743C25.3525 49.5041 22.7477 54.0158 18.6621 53.7988V53.7988V53.7988C14.5765 54.0158 11.9716 49.5041 14.2024 46.0743V46.0743V46.0743Z" fill="#07323E"/>
+<path d="M54.0647 26.6034C58.2891 26.6034 62.0531 27.5241 65.3568 29.3655C68.7147 31.2069 71.3414 33.8066 73.237 37.1644C75.1326 40.5223 76.0804 44.3947 76.0804 48.7816C76.0804 53.1684 75.1326 57.0679 73.237 60.4799C71.3414 63.8378 68.7147 66.4374 65.3568 68.2788C62.0531 70.1203 58.2891 71.041 54.0647 71.041C48.2155 71.041 43.5849 69.0912 40.1729 65.1918V86.2326H30.018V27.0908H39.6854V32.7775C41.3644 30.7195 43.4224 29.176 45.8596 28.1469C48.3509 27.1179 51.0859 26.6034 54.0647 26.6034ZM52.9273 62.3484C56.6643 62.3484 59.7243 61.1028 62.1073 58.6114C64.5445 56.1201 65.763 52.8435 65.763 48.7816C65.763 44.7196 64.5445 41.443 62.1073 38.9517C59.7243 36.4604 56.6643 35.2147 52.9273 35.2147C50.4902 35.2147 48.2967 35.7834 46.347 36.9207C44.3973 38.0039 42.8537 39.5745 41.7164 41.6326C40.579 43.6906 40.0104 46.0736 40.0104 48.7816C40.0104 51.4895 40.579 53.8725 41.7164 55.9306C42.8537 57.9886 44.3973 59.5863 46.347 60.7236C48.2967 61.8068 50.4902 62.3484 52.9273 62.3484Z" fill="#07323E"/>
+</svg>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <div class="logo-placeholder"><svg width="221" height="61" viewBox="0 0 221 61" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M77.969 19.7668C80.3026 19.7668 82.3819 20.2754 84.2068 21.2926C86.0617 22.3098 87.5127 23.7458 88.5598 25.6007C89.6069 27.4556 90.1305 29.5947 90.1305 32.018C90.1305 34.4413 89.6069 36.5954 88.5598 38.4802C87.5127 40.3351 86.0617 41.7711 84.2068 42.7883C82.3819 43.8055 80.3026 44.3141 77.969 44.3141C74.738 44.3141 72.18 43.237 70.2952 41.083V52.7059H64.6857V20.0361H70.026V23.1774C70.9534 22.0405 72.0903 21.1879 73.4366 20.6195C74.8128 20.051 76.3236 19.7668 77.969 19.7668ZM77.3408 39.5123C79.4051 39.5123 81.0954 38.8242 82.4118 37.448C83.7581 36.0718 84.4312 34.2618 84.4312 32.018C84.4312 29.7742 83.7581 27.9642 82.4118 26.588C81.0954 25.2118 79.4051 24.5237 77.3408 24.5237C75.9945 24.5237 74.7828 24.8378 73.7058 25.4661C72.6288 26.0644 71.7761 26.932 71.1479 28.0689C70.5196 29.2058 70.2055 30.5221 70.2055 32.018C70.2055 33.5139 70.5196 34.8302 71.1479 35.9671C71.7761 37.104 72.6288 37.9865 73.7058 38.6148C74.7828 39.2131 75.9945 39.5123 77.3408 39.5123ZM119.773 39.6918C120.521 39.6918 121.224 39.5572 121.882 39.2879L121.299 43.7307C120.252 44.1196 119.085 44.3141 117.799 44.3141C116.213 44.3141 114.897 43.985 113.85 43.3268C112.803 42.6387 112.099 41.6963 111.74 40.4996C110.663 41.7262 109.377 42.6686 107.881 43.3268C106.415 43.985 104.77 44.3141 102.945 44.3141C100.97 44.3141 99.1751 43.8952 97.5596 43.0575C95.974 42.2199 94.7174 41.0082 93.79 39.4226C92.8626 37.807 92.3988 35.9222 92.3988 33.7682C92.3988 31.1055 92.9822 28.7121 94.149 26.588C95.3457 24.4339 96.9612 22.7586 98.9956 21.5619C101.06 20.3652 103.364 19.7668 105.907 19.7668C109.736 19.7668 112.458 21.0383 114.074 23.5813L114.747 20.0361H120.357L117.126 36.1466C117.036 36.5056 116.991 36.8497 116.991 37.1788C116.991 37.9865 117.23 38.6148 117.709 39.0636C118.188 39.4824 118.876 39.6918 119.773 39.6918ZM104.381 39.5123C105.966 39.5123 107.373 39.1384 108.599 38.3904C109.856 37.6126 110.843 36.5505 111.561 35.2042C112.279 33.828 112.638 32.2723 112.638 30.5371C112.638 28.6523 112.085 27.1863 110.978 26.1392C109.871 25.0622 108.315 24.5237 106.31 24.5237C104.725 24.5237 103.304 24.9126 102.047 25.6905C100.821 26.4384 99.8483 27.5005 99.1303 28.8767C98.4122 30.223 98.0532 31.7637 98.0532 33.4989C98.0532 35.3837 98.6067 36.8646 99.7136 37.9417C100.821 38.9888 102.376 39.5123 104.381 39.5123ZM132.894 44.2692C128.915 44.2692 126.731 42.0553 126.342 37.6275L124.233 38.8841L123.111 35.5632L126.881 32.9604L128.631 22.4594C129.229 19.0189 130.321 16.446 131.907 14.7407C133.492 13.0354 135.347 12.1827 137.471 12.1827C139.207 12.1827 140.553 12.7213 141.51 13.7983C142.497 14.8753 142.991 16.3861 142.991 18.3308C142.991 20.4549 142.438 22.4893 141.331 24.4339C140.224 26.3786 138.922 28.0988 137.426 29.5947C135.96 31.0606 134.24 32.5864 132.266 34.1721C132.176 34.8003 132.131 35.3538 132.131 35.8325C132.131 37.8369 132.984 38.8392 134.689 38.8392C135.676 38.8392 136.604 38.525 137.471 37.8968C138.339 37.2386 139.221 36.386 140.119 35.3388L142.497 38.3007C139.954 42.2797 136.753 44.2692 132.894 44.2692ZM133.253 28.2484C134.689 26.8124 135.931 25.2267 136.978 23.4915C138.055 21.7563 138.593 20.0809 138.593 18.4654C138.593 17.8371 138.474 17.3435 138.234 16.9845C137.995 16.5956 137.681 16.4011 137.292 16.4011C135.946 16.4011 134.973 18.1812 134.375 21.7414L133.253 28.2484ZM176.361 19.7668C179.383 19.7668 181.776 20.6494 183.542 22.4145C185.307 24.1497 186.189 26.7675 186.189 30.2678V43.9999H180.58V30.9859C180.58 28.8916 180.116 27.321 179.189 26.2739C178.261 25.1968 176.93 24.6583 175.195 24.6583C173.31 24.6583 171.799 25.2866 170.662 26.5431C169.525 27.7697 168.957 29.5349 168.957 31.8385V43.9999H163.347V30.9859C163.347 28.8916 162.884 27.321 161.956 26.2739C161.029 25.1968 159.697 24.6583 157.962 24.6583C156.047 24.6583 154.522 25.2716 153.385 26.4982C152.278 27.7249 151.724 29.5049 151.724 31.8385V43.9999H146.115V20.0361H151.455V23.0876C152.353 22.0106 153.475 21.1879 154.821 20.6195C156.167 20.051 157.663 19.7668 159.308 19.7668C161.104 19.7668 162.689 20.1109 164.065 20.799C165.471 21.4571 166.578 22.4444 167.386 23.7608C168.373 22.5043 169.645 21.5319 171.201 20.8438C172.756 20.1258 174.477 19.7668 176.361 19.7668ZM216.783 39.6918C217.531 39.6918 218.234 39.5572 218.892 39.2879L218.309 43.7307C217.262 44.1196 216.095 44.3141 214.808 44.3141C213.223 44.3141 211.906 43.985 210.859 43.3268C209.812 42.6387 209.109 41.6963 208.75 40.4996C207.673 41.7262 206.387 42.6686 204.891 43.3268C203.425 43.985 201.779 44.3141 199.954 44.3141C197.98 44.3141 196.185 43.8952 194.569 43.0575C192.984 42.2199 191.727 41.0082 190.8 39.4226C189.872 37.807 189.408 35.9222 189.408 33.7682C189.408 31.1055 189.992 28.7121 191.159 26.588C192.355 24.4339 193.971 22.7586 196.005 21.5619C198.07 20.3652 200.373 19.7668 202.916 19.7668C206.746 19.7668 209.468 21.0383 211.084 23.5813L211.757 20.0361H217.366L214.135 36.1466C214.045 36.5056 214.001 36.8497 214.001 37.1788C214.001 37.9865 214.24 38.6148 214.719 39.0636C215.197 39.4824 215.885 39.6918 216.783 39.6918ZM201.39 39.5123C202.976 39.5123 204.382 39.1384 205.609 38.3904C206.865 37.6126 207.853 36.5505 208.571 35.2042C209.289 33.828 209.648 32.2723 209.648 30.5371C209.648 28.6523 209.094 27.1863 207.987 26.1392C206.88 25.0622 205.325 24.5237 203.32 24.5237C201.734 24.5237 200.313 24.9126 199.057 25.6905C197.83 26.4384 196.858 27.5005 196.14 28.8767C195.422 30.223 195.063 31.7637 195.063 33.4989C195.063 35.3837 195.616 36.8646 196.723 37.9417C197.83 38.9888 199.386 39.5123 201.39 39.5123Z" fill="#07323E"/>
+<circle cx="25.6321" cy="33.652" r="19.969" fill="#07323E"/>
+<path d="M9.94119 32.2521C11.2396 29.6993 14.8864 29.6993 16.1848 32.2521V32.2521V32.2521C17.7463 34.6529 15.9229 37.8111 13.063 37.6592V37.6592V37.6592C10.203 37.8111 8.37966 34.6529 9.94119 32.2521V32.2521V32.2521Z" fill="#F4F4F4"/>
+<path d="M37.8454 18.3224C40.8025 18.3224 43.4373 18.9669 45.7499 20.2559C48.1004 21.5449 49.9391 23.3646 51.266 25.7151C52.5929 28.0656 53.2563 30.7763 53.2563 33.8471C53.2563 36.918 52.5929 39.6476 51.266 42.036C49.9391 44.3865 48.1004 46.2062 45.7499 47.4952C43.4373 48.7842 40.8025 49.4287 37.8454 49.4287C33.7509 49.4287 30.5095 48.0639 28.1211 45.3343V60.0629H21.0127V18.6636H27.7799V22.6443C28.9551 21.2037 30.3958 20.1232 32.1018 19.4029C33.8457 18.6826 35.7602 18.3224 37.8454 18.3224ZM37.0492 43.3439C39.6651 43.3439 41.8071 42.472 43.4752 40.728C45.1812 38.9841 46.0342 36.6905 46.0342 33.8471C46.0342 31.0038 45.1812 28.7101 43.4752 26.9662C41.8071 25.2223 39.6651 24.3503 37.0492 24.3503C35.3432 24.3503 33.8078 24.7484 32.443 25.5445C31.0782 26.3028 29.9977 27.4022 29.2016 28.8428C28.4054 30.2835 28.0074 31.9516 28.0074 33.8471C28.0074 35.7427 28.4054 37.4108 29.2016 38.8514C29.9977 40.2921 31.0782 41.4105 32.443 42.2066C33.8078 42.9648 35.3432 43.3439 37.0492 43.3439Z" fill="#F4F4F4"/>
+</svg>
+</div>
+    </header>
+
+    <div class="reflection-wrapper">
+        <div class="reflection-container" id="container">
+            <div id="error-message"></div>
+            
+            <!-- Loading View -->
+            <div id="view-loading" class="loading-state">
+                <div class="spinner"></div>
+                <p id="loading-text">Preparing your reflection...</p>
+            </div>
+
+            <!-- Questions View -->
+            <div id="view-questions" class="hidden">
+                <div class="progress-dots" id="dots-container"></div>
+                <div id="question-content"></div>
+                <div class="nav-controls">
+                    <button class="nav-btn prev-btn" id="btn-prev">Previous</button>
+                    <button class="nav-btn next-btn" id="btn-next">Next</button>
+                </div>
+            </div>
+
+            <!-- Food Selection View -->
+            <div id="view-food" class="hidden">
+                <h1>Choose foods</h1>
+                
+                <div id="regular-section">
+                    <h2>Your Regular Foods</h2>
+                    <div class="food-grid" id="grid-regular"></div>
+                </div>
+
+                <div id="recom-section">
+                    <h2>Choose for You</h2>
+                    <div class="food-grid" id="grid-recom"></div>
+                </div>
+
+                <div class="nav-controls">
+                    <button class="nav-btn next-btn" id="btn-submit-all">Complete Selection</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const userId = localStorage.getItem("user_id");
+        let questions = [];
+        let currentIndex = 0;
+        let responses = {};
+        let selectedFoods = new Set();
+
+        if (!userId) { window.location.href = "/login.html"; }
+
+        // Initialize UI
+        window.onload = async () => {
+            // Preloader
+            startPreloader();
+            
+            try {
+                const res = await fetch(`/api/request-questions?user_id=${encodeURIComponent(userId)}`);
+                const data = await res.json();
+                questions = data.questions || [];
+                
+                document.getElementById('view-loading').classList.add('hidden');
+                document.getElementById('view-questions').classList.remove('hidden');
+                
+                // Create dots
+                const dots = document.getElementById('dots-container');
+                questions.forEach((_, i) => {
+                    const dot = document.createElement('div');
+                    dot.className = 'dot';
+                    dots.appendChild(dot);
+                });
+                
+                renderQuestion();
+            } catch (err) {
+                showError("Failed to load questions. Please check connection.");
+            }
+        };
+
+        function startPreloader() {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.classList.add('wipe-active');
+                setTimeout(() => {
+                    preloader.classList.add('exit');
+                    document.body.style.overflow = 'auto';
+                    setTimeout(() => { preloader.style.display = 'none'; }, 800);
+                }, 1200);
+            }, 1000);
+        }
+
+        function renderQuestion() {
+            const q = questions[currentIndex];
+            const content = document.getElementById('question-content');
+            const dots = document.querySelectorAll('.dot');
+            
+            dots.forEach((d, i) => d.classList.toggle('active', i === currentIndex));
+            document.getElementById('btn-prev').disabled = currentIndex === 0;
+            document.getElementById('btn-next').textContent = currentIndex === questions.length - 1 ? 'Proceed' : 'Next';
+
+            let html = `<h1>${q.question}</h1>`;
+
+            if (q.type === 'rating') {
+                const val = responses[q.id] || Math.round((q.scale.min + q.scale.max) / 2);
+                html += `
+                    <div style="margin: 40px 0;">
+                        <input type="range" class="range-slider" id="rating-slider" min="${q.scale.min}" max="${q.scale.max}" value="${val}">
+                        <div class="range-labels">
+                            <span>${q.scale.labels[q.scale.min]}</span>
+                            <span id="val-display" style="font-weight: 700; color: var(--primary-teal); font-size: 20px;">${val}</span>
+                            <span>${q.scale.labels[q.scale.max]}</span>
+                        </div>
+                    </div>`;
+            } else if (q.type === 'boolean') {
+                const val = responses[q.id];
+                html += `
+                    <div class="boolean-container">
+                        <button class="bool-btn ${val === true ? 'selected' : ''}" onclick="saveBool(true)">Yes</button>
+                        <button class="bool-btn ${val === false ? 'selected' : ''}" onclick="saveBool(false)">No</button>
+                    </div>`;
+            }
+
+            content.innerHTML = html;
+
+            const slider = document.getElementById('rating-slider');
+            if (slider) {
+                slider.oninput = (e) => {
+                    document.getElementById('val-display').innerText = e.target.value;
+                    responses[q.id] = parseInt(e.target.value);
+                };
+                if (!responses[q.id]) responses[q.id] = parseInt(slider.value);
+            }
+        }
+
+        function saveBool(val) {
+            responses[questions[currentIndex].id] = val;
+            renderQuestion();
+        }
+
+        document.getElementById('btn-prev').onclick = () => { currentIndex--; renderQuestion(); };
+
+        document.getElementById('btn-next').onclick = async () => {
+            const q = questions[currentIndex];
+            if (q.type === 'boolean' && responses[q.id] === undefined) return;
+
+            if (currentIndex < questions.length - 1) {
+                currentIndex++;
+                renderQuestion();
+            } else {
+                fetchFoodRecommendations();
+            }
+        };
+
+        async function fetchFoodRecommendations() {
+            const loadingText = document.getElementById('loading-text');
+            document.getElementById('view-questions').classList.add('hidden');
+            document.getElementById('view-loading').classList.remove('hidden');
+            loadingText.innerText = "Analyzing your habits...";
+
+            try {
+                // Parallel submission and recommendation request
+                const submitPromise = fetch('/api/submit-reflection', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: userId, responses, timestamp: new Date().toISOString() })
+                });
+
+                const recommendPromise = fetch('/recommend-foods', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: userId })
+                });
+
+                const [submitRes, recommendRes] = await Promise.all([submitPromise, recommendPromise]);
+                
+                // We primarily care if recommendations succeed to show the next screen
+                if (recommendRes.ok) {
+                    const data = await recommendRes.json();
+                    if (data.success) {
+                        renderFoodSelection(data.regularfoods, data.recomfoods);
+                    } else {
+                        // If logic fails but request ok, fallback to home
+                        window.location.href = "/home.html";
+                    }
+                } else {
+                    throw new Error("Failed to fetch recommendations");
+                }
+            } catch (err) {
+                showError("Could not retrieve recommendations. Redirecting...");
+                setTimeout(() => window.location.href = "/home.html", 2000);
+            }
+        }
+
+        function renderFoodSelection(regular, recommended) {
+            document.getElementById('view-loading').classList.add('hidden');
+            document.getElementById('view-food').classList.remove('hidden');
+
+            const regGrid = document.getElementById('grid-regular');
+            const recGrid = document.getElementById('grid-recom');
+            const regSection = document.getElementById('regular-section');
+            const recSection = document.getElementById('recom-section');
+
+            // Handle Regular Foods
+            if (!regular || regular.length === 0) {
+                regSection.classList.add('hidden');
+            } else {
+                regSection.classList.remove('hidden');
+                regGrid.innerHTML = ''; // clear previous
+                regular.forEach(item => regGrid.appendChild(createFoodBtn(item)));
+            }
+
+            // Handle Recommended Foods
+            if (!recommended || recommended.length === 0) {
+                recSection.classList.add('hidden');
+            } else {
+                recSection.classList.remove('hidden');
+                recGrid.innerHTML = ''; // clear previous
+                recommended.forEach(item => recGrid.appendChild(createFoodBtn(item)));
+            }
+        }
+
+        function createFoodBtn(item) {
+            const btn = document.createElement('button');
+            btn.className = 'food-btn';
+            btn.innerText = item;
+            btn.onclick = () => {
+                btn.classList.toggle('selected');
+                if (selectedFoods.has(item)) selectedFoods.delete(item);
+                else selectedFoods.add(item);
+            };
+            return btn;
+        }
+
+        document.getElementById('btn-submit-all').onclick = async () => {
+            // Logic to save selected foods could go here
+            window.location.href = "/home.html";
+        };
+
+        function showError(msg) {
+            const err = document.getElementById('error-message');
+            err.innerText = msg;
+            err.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

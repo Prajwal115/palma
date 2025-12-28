@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; /* Prevent scrolling on the main container */
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+        }
+
+        /* Left Half: Image Placeholder */
+        .left-half {
+            flex: 1;
+            background-color: #f0f2f5;
+            /* Placeholder image representing a modern workspace/abstract design */
+            background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url('IMG/logreg.svg');
+            background-size: cover;
+            background-position: center;
+            display: none; 
+        }
+
+        /* Right Half: Login Form Container */
+        .right-half {
+            flex: 1;
+            display: flex;
+            align-items: center; /* Vertical alignment */
+            justify-content: center; /* Horizontal alignment */
+            padding: 40px;
+            background-color: #ffffff;
+        }
+
+        /* Content Wrapper */
+        .login-box {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Logo Placeholder */
+        .logo-container {
+            margin-bottom: 50px; /* Vertical spacing between logo and heading */
+        }
+
+        .logo-svg {
+            width: 120px;
+            height: 40px;
+     
+        }
+
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 35px;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .signup-text {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .signup-text a {
+            color: #1D5667;
+            text-decoration: underline;
+            font-weight: 500;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-family: 'Inter', sans-serif;
+            font-size: 17px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: #444;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 13px;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.2s ease;
+            background-color: #f8fafc;
+        }
+
+        input:focus {
+            border-color: teal;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(0, 128, 128, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: teal;
+            color: white;
+            border: none;
+            border-radius: 13px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 128, 128, 0.2);
+        }
+
+        .login-btn:hover {
+            background-color: #006d6d;
+        }
+
+        /* Responsive adjustments */
+        @media (min-width: 768px) {
+            .left-half {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<script>
+    // Redirect if user is already logged in
+    if (localStorage.getItem("user_id")) {
+        window.location.href = "/home";
+    }
+</script>
+<body>
+
+    <div class="container">
+        <!-- Visual Section -->
+        <div class="left-half"></div>
+
+        <!-- Interactive Section -->
+        <div class="right-half">
+            <div class="login-box">
+                <!-- SVG Logo Placeholder -->
+
+
+                <h1>Login</h1>
+                <p class="signup-text">If you don't have an account, <a href="/register">Signup here</a></p>
+                
+                <form onsubmit="event.preventDefault();">
+                    <div class="form-group">
+                        <label for="email">Enter your email:</label>
+                        <input type="text" id="email" placeholder="johndoe@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Enter your password:</label>
+                        <input type="password" id="password" placeholder="••••••••" required>
+                    </div>
+
+                    <button type="submit" class="login-btn">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+<script>
+    const loginBtn = document.querySelector(".login-btn");
+
+    loginBtn.addEventListener("click", function () {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        fetch("/api/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                localStorage.setItem("user_id", data.user_id);
+                window.location.href = "/home";  // redirect after successful login
+            } else {
+                alert(data.message);  // you can replace this with your custom modal later
+            }
+        })
+        .catch(error => {
+            alert("Something went wrong. Please try again.");
+        });
+    });
+</script>
+</body>
+</html>

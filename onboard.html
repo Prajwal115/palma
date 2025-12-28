@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - Onboarding</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f4f4;
+            color: #1a1a1a;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            height: 100px;
+            z-index: 10;
+        }
+
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-right: 20px;
+        }
+
+        .nav-link {
+            background: none;
+            border: none;
+            color: #07323E;
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: underline;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .nav-link:hover {
+            opacity: 0.7;
+        }
+
+        #prevBtn {
+            display: none;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0 50px;
+        }
+
+        .step {
+            display: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        .step.active {
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .step-header {
+            margin-top: 50px;
+            text-align: left;
+        }
+
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 50px;
+            margin-bottom: 8px;
+            color: #07323E;
+        }
+
+        .sub-heading {
+            font-size: 18px;
+            color: #475569;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        .content-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        .onboarding-card {
+            width: 100%;
+            max-width: 500px;
+            text-align: left;
+        }
+
+        .input-group { 
+            margin-bottom: 20px; 
+            width: 100%;
+        }
+        
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            background: none;
+            border: 1.5px solid #07323E;
+            border-radius: 50px;
+            padding: 10px 20px;
+        }
+
+        .avatar-circle {
+            width: 60px; height: 60px; border-radius: 50%;
+            background-color: #D0E6E3; display: flex; align-items: center;
+            justify-content: center; font-size: 30px; flex-shrink: 0;
+        }
+
+        input {
+            flex: 1; border: none; background: transparent;
+            padding: 15px; font-size: 18px; outline: none;
+            width: 100%;
+            font-family: 'Poppins', sans-serif;
+            color: #07323E;
+        }
+
+        .split-container {
+            display: flex;
+            flex: 1;
+            margin-top: 10px;
+        }
+
+        .left-section {
+            flex: 0 0 75%;
+            padding-right: 40px;
+        }
+
+        .vertical-divider {
+            width: 1px;
+            background-color: #cbd5e1;
+            margin: 0 40px 40px 0;
+            height: 300px;
+        }
+
+        .right-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding-top: 20px;
+        }
+
+        .selection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+            width: 100%;
+        }
+
+        .selection-box {
+            width: 200px; /* Default for Goal/Diet */
+            height: 60px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 10px;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            color: #000;
+            border: 2px solid #07323E;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        /* Specific override for Food Grid via JS */
+        .food-grid-item {
+            width: 240px;
+        }
+
+        .selection-box:hover, .selection-box.selected {
+            background: #000;
+            color: #fff;
+        }
+
+        .no-btn {
+            background: none;
+            border: 1.5px solid #07323E;
+            color: #07323E;
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .no-btn:hover {
+            background: #07323E;
+            color: #fff;
+        }
+
+        .info-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 26px;
+            margin-bottom: 12px;
+            color: #07323E;
+            text-transform: capitalize;
+        }
+
+        .info-desc {
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #64748b;
+        }
+
+        .info-stats {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #07323E;
+        }
+
+        #customAlert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            color: #008080;
+            padding: 15px 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            z-index: 1000;
+            display: none;
+            border: 1px solid #eee;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown { from { top: -50px; opacity: 0; } to { top: 20px; opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div id="customAlert">Please fill in all fields to continue.</div>
+
+    <header>
+        <div class="logo-placeholder">
+            <svg width="161" height="51" style="transform: translateY(7%);" viewBox="0 0 221 61" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M77.969 19.7668C80.3026 19.7668 82.3819 20.2754 84.2068 21.2926C86.0617 22.3098 87.5127 23.7458 88.5598 25.6007C89.6069 27.4556 90.1305 29.5947 90.1305 32.018C90.1305 34.4413 89.6069 36.5954 88.5598 38.4802C87.5127 40.3351 86.0617 41.7711 84.2068 42.7883C82.3819 43.8055 80.3026 44.3141 77.969 44.3141C74.738 44.3141 72.18 43.237 70.2952 41.083V52.7059H64.6857V20.0361H70.026V23.1774C70.9534 22.0405 72.0903 21.1879 73.4366 20.6195C74.8128 20.051 76.3236 19.7668 77.969 19.7668ZM77.3408 39.5123C79.4051 39.5123 81.0954 38.8242 82.4118 37.448C83.7581 36.0718 84.4312 34.2618 84.4312 32.018C84.4312 29.7742 83.7581 27.9642 82.4118 26.588C81.0954 25.2118 79.4051 24.5237 77.3408 24.5237C75.9945 24.5237 74.7828 24.8378 73.7058 25.4661C72.6288 26.0644 71.7761 26.932 71.1479 28.0689C70.5196 29.2058 70.2055 30.5221 70.2055 32.018C70.2055 33.5139 70.5196 34.8302 71.1479 35.9671C71.7761 37.104 72.6288 37.9865 73.7058 38.6148C74.7828 39.2131 75.9945 39.5123 77.3408 39.5123ZM119.773 39.6918C120.521 39.6918 121.224 39.5572 121.882 39.2879L121.299 43.7307C120.252 44.1196 119.085 44.3141 117.799 44.3141C116.213 44.3141 114.897 43.985 113.85 43.3268C112.803 42.6387 112.099 41.6963 111.74 40.4996C110.663 41.7262 109.377 42.6686 107.881 43.3268C106.415 43.985 104.77 44.3141 102.945 44.3141C100.97 44.3141 99.1751 43.8952 97.5596 43.0575C95.974 42.2199 94.7174 41.0082 93.79 39.4226C92.8626 37.807 92.3988 35.9222 92.3988 33.7682C92.3988 31.1055 92.9822 28.7121 94.149 26.588C95.3457 24.4339 96.9612 22.7586 98.9956 21.5619C101.06 20.3652 103.364 19.7668 105.907 19.7668C109.736 19.7668 112.458 21.0383 114.074 23.5813L114.747 20.0361H120.357L117.126 36.1466C117.036 36.5056 116.991 36.8497 116.991 37.1788C116.991 37.9865 117.23 38.6148 117.709 39.0636C118.188 39.4824 118.876 39.6918 119.773 39.6918ZM104.381 39.5123C105.966 39.5123 107.373 39.1384 108.599 38.3904C109.856 37.6126 110.843 36.5505 111.561 35.2042C112.279 33.828 112.638 32.2723 112.638 30.5371C112.638 28.6523 112.085 27.1863 110.978 26.1392C109.871 25.0622 108.315 24.5237 106.31 24.5237C104.725 24.5237 103.304 24.9126 102.047 25.6905C100.821 26.4384 99.8483 27.5005 99.1303 28.8767C98.4122 30.223 98.0532 31.7637 98.0532 33.4989C98.0532 35.3837 98.6067 36.8646 99.7136 37.9417C100.821 38.9888 102.376 39.5123 104.381 39.5123ZM132.894 44.2692C128.915 44.2692 126.731 42.0553 126.342 37.6275L124.233 38.8841L123.111 35.5632L126.881 32.9604L128.631 22.4594C129.229 19.0189 130.321 16.446 131.907 14.7407C133.492 13.0354 135.347 12.1827 137.471 12.1827C139.207 12.1827 140.553 12.7213 141.51 13.7983C142.497 14.8753 142.991 16.3861 142.991 18.3308C142.991 20.4549 142.438 22.4893 141.331 24.4339C140.224 26.3786 138.922 28.0988 137.426 29.5947C135.96 31.0606 134.24 32.5864 132.266 34.1721C132.176 34.8003 132.131 35.3538 132.131 35.8325C132.131 37.8369 132.984 38.8392 134.689 38.8392C135.676 38.8392 136.604 38.525 137.471 37.8968C138.339 37.2386 139.221 36.386 140.119 35.3388L142.497 38.3007C139.954 42.2797 136.753 44.2692 132.894 44.2692ZM133.253 28.2484C134.689 26.8124 135.931 25.2267 136.978 23.4915C138.055 21.7563 138.593 20.0809 138.593 18.4654C138.593 17.8371 138.474 17.3435 138.234 16.9845C137.995 16.5956 137.681 16.4011 137.292 16.4011C135.946 16.4011 134.973 18.1812 134.375 21.7414L133.253 28.2484ZM176.361 19.7668C179.383 19.7668 181.776 20.6494 183.542 22.4145C185.307 24.1497 186.189 26.7675 186.189 30.2678V43.9999H180.58V30.9859C180.58 28.8916 180.116 27.321 179.189 26.2739C178.261 25.1968 176.93 24.6583 175.195 24.6583C173.31 24.6583 171.799 25.2866 170.662 26.5431C169.525 27.7697 168.957 29.5349 168.957 31.8385V43.9999H163.347V30.9859C163.347 28.8916 162.884 27.321 161.956 26.2739C161.029 25.1968 159.697 24.6583 157.962 24.6583C156.047 24.6583 154.522 25.2716 153.385 26.4982C152.278 27.7249 151.724 29.5049 151.724 31.8385V43.9999H146.115V20.0361H151.455V23.0876C152.353 22.0106 153.475 21.1879 154.821 20.6195C156.167 20.051 157.663 19.7668 159.308 19.7668C161.104 19.7668 162.689 20.1109 164.065 20.799C165.471 21.4571 166.578 22.4444 167.386 23.7608C168.373 22.5043 169.645 21.5319 171.201 20.8438C172.756 20.1258 174.477 19.7668 176.361 19.7668ZM216.783 39.6918C217.531 39.6918 218.234 39.5572 218.892 39.2879L218.309 43.7307C217.262 44.1196 216.095 44.3141 214.808 44.3141C213.223 44.3141 211.906 43.985 210.859 43.3268C209.812 42.6387 209.109 41.6963 208.75 40.4996C207.673 41.7262 206.387 42.6686 204.891 43.3268C203.425 43.985 201.779 44.3141 199.954 44.3141C197.98 44.3141 196.185 43.8952 194.569 43.0575C192.984 42.2199 191.727 41.0082 190.8 39.4226C189.872 37.807 189.408 35.9222 189.408 33.7682C189.408 31.1055 189.992 28.7121 191.159 26.588C192.355 24.4339 193.971 22.7586 196.005 21.5619C198.07 20.3652 200.373 19.7668 202.916 19.7668C206.746 19.7668 209.468 21.0383 211.084 23.5813L211.757 20.0361H217.366L214.135 36.1466C214.045 36.5056 214.001 36.8497 214.001 37.1788C214.001 37.9865 214.24 38.6148 214.719 39.0636C215.197 39.4824 215.885 39.6918 216.783 39.6918ZM201.39 39.5123C202.976 39.5123 204.382 39.1384 205.609 38.3904C206.865 37.6126 207.853 36.5505 208.571 35.2042C209.289 33.828 209.648 32.2723 209.648 30.5371C209.648 28.6523 209.094 27.1863 207.987 26.1392C206.88 25.0622 205.325 24.5237 203.32 24.5237C201.734 24.5237 200.313 24.9126 199.057 25.6905C197.83 26.4384 196.858 27.5005 196.14 28.8767C195.422 30.223 195.063 31.7637 195.063 33.4989C195.063 35.3837 195.616 36.8646 196.723 37.9417C197.83 38.9888 199.386 39.5123 201.39 39.5123Z" fill="#07323E"/>
+<circle cx="25.6321" cy="33.652" r="19.969" fill="#07323E"/>
+<path d="M9.94119 32.2521C11.2396 29.6993 14.8864 29.6993 16.1848 32.2521V32.2521V32.2521C17.7463 34.6529 15.9229 37.8111 13.063 37.6592V37.6592V37.6592C10.203 37.8111 8.37966 34.6529 9.94119 32.2521V32.2521V32.2521Z" fill="#F4F4F4"/>
+<path d="M37.8454 18.3224C40.8025 18.3224 43.4373 18.9669 45.7499 20.2559C48.1004 21.5449 49.9391 23.3646 51.266 25.7151C52.5929 28.0656 53.2563 30.7763 53.2563 33.8471C53.2563 36.918 52.5929 39.6476 51.266 42.036C49.9391 44.3865 48.1004 46.2062 45.7499 47.4952C43.4373 48.7842 40.8025 49.4287 37.8454 49.4287C33.7509 49.4287 30.5095 48.0639 28.1211 45.3343V60.0629H21.0127V18.6636H27.7799V22.6443C28.9551 21.2037 30.3958 20.1232 32.1018 19.4029C33.8457 18.6826 35.7602 18.3224 37.8454 18.3224ZM37.0492 43.3439C39.6651 43.3439 41.8071 42.472 43.4752 40.728C45.1812 38.9841 46.0342 36.6905 46.0342 33.8471C46.0342 31.0038 45.1812 28.7101 43.4752 26.9662C41.8071 25.2223 39.6651 24.3503 37.0492 24.3503C35.3432 24.3503 33.8078 24.7484 32.443 25.5445C31.0782 26.3028 29.9977 27.4022 29.2016 28.8428C28.4054 30.2835 28.0074 31.9516 28.0074 33.8471C28.0074 35.7427 28.4054 37.4108 29.2016 38.8514C29.9977 40.2921 31.0782 41.4105 32.443 42.2066C33.8078 42.9648 35.3432 43.3439 37.0492 43.3439Z" fill="#F4F4F4"/>
+</svg>
+        </div>
+        <div class="nav-buttons">
+            <button class="nav-link" id="prevBtn">Previous</button>
+            <button class="nav-link" id="globalNext">Next</button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Step 1: Name -->
+        <div class="step active" id="step1">
+            <div class="step-header">
+                <h1>What can we call you?</h1>
+                <p class="sub-heading">Pick a name to start your journey.</p>
+            </div>
+            <div class="content-container">
+                <div class="onboarding-card">
+                    <div class="input-wrapper">
+                        <div class="avatar-circle" id="avatarIcon">👤</div>
+                        <input type="text" id="nameInput" placeholder="Your name" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Details -->
+        <div class="step" id="step2">
+            <div class="step-header">
+                <h1>We need your details</h1>
+                <p class="sub-heading">These are required for the software calculations.</p>
+            </div>
+            <div class="content-container">
+                <div class="onboarding-card">
+                    <div class="input-group"><div class="input-wrapper"><input type="number" id="weightInput" placeholder="Enter weight (kg)"></div></div>
+                    <div class="input-group"><div class="input-wrapper"><input type="number" id="heightInput" placeholder="Enter height (cm)"></div></div>
+                    <div class="input-group"><div class="input-wrapper"><input type="date" id="dobInput" title="Date of Birth"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Goal Selection -->
+        <div class="step" id="step3">
+            <div class="step-header">
+                <h1>Choose your goal</h1>
+                <p class="sub-heading">Select the focus that resonates most with your current path.</p>
+            </div>
+            <div class="split-container">
+                <div class="left-section">
+                    <div class="selection-grid">
+                        <div class="selection-box goal-box" data-value="Balance">Balance</div>
+                        <div class="selection-box goal-box" data-value="Feather">Feather</div>
+                        <div class="selection-box goal-box" data-value="Zeal">Zeal</div>
+                        <div class="selection-box goal-box" data-value="Ease">Ease</div>
+                        <div class="selection-box goal-box" data-value="Restore">Restore</div>
+                    </div>
+                </div>
+                <div class="vertical-divider"></div>
+                <div class="right-section">
+                    <div class="info-title" id="goalTitle">Select a goal</div>
+                    <div class="info-desc" id="goalDesc">Hover over a focus area to see descriptions.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4: Dietary Preferences -->
+        <div class="step" id="step4">
+            <div class="step-header">
+                <h1>Dietary Preferences</h1>
+                <p class="sub-heading">Help us tailor your meal suggestions to your lifestyle.</p>
+            </div>
+            <div class="split-container">
+                <div class="left-section">
+                    <div class="selection-grid">
+                        <div class="selection-box diet-box" data-value="Vegetarian">Vegetarian</div>
+                        <div class="selection-box diet-box" data-value="Non-Vegetarian">Non-Veg</div>
+                        <div class="selection-box diet-box" data-value="Vegan">Vegan</div>
+                        <div class="selection-box diet-box" data-value="Pescatarian">Pescatarian</div>
+                        <div class="selection-box diet-box" data-value="Keto">Keto</div>
+                        <div class="selection-box diet-box" data-value="Paleo">Paleo</div>
+                    </div>
+                </div>
+                <div class="vertical-divider"></div>
+                <div class="right-section">
+                    <div class="info-title" id="dietTitle">Choose a diet</div>
+                    <div class="info-desc" id="dietDesc">Explore our dietary options.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 5: Regular Foods -->
+        <div class="step" id="step5">
+            <div class="step-header">
+                <h1>Choose regular foods</h1>
+                <p class="sub-heading">Choose atmost 5 foods you consume regularly. You can add more later.</p>
+            </div>
+            <div class="split-container">
+                <div class="left-section">
+                    <div class="selection-grid" id="foodGrid" style="grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));">
+                        <!-- Foods injected with 240px width via JS -->
+                    </div>
+                </div>
+                <div class="vertical-divider"></div>
+                <div class="right-section">
+                    <div class="info-title" id="foodTitle">Select your foods</div>
+                    <div class="info-desc" id="foodDesc">Hover over a meal to view nutrition and description.</div>
+                    <div class="info-stats" id="foodStats"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 6: Allergies -->
+        <div class="step" id="step6">
+            <div class="step-header">
+                <h1>Do you have any Allergies?</h1>
+                <p class="sub-heading">Please specify any allergies to ensure your safety.</p>
+            </div>
+            <div class="content-container">
+                <div class="onboarding-card">
+                    <div class="input-wrapper">
+                        <input type="text" id="allergyInput" placeholder="e.g. Peanuts, Shellfish, Gluten" autocomplete="off">
+                    </div>
+                    <button class="no-btn" id="noAllergyBtn">No, I don't have allergies</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 7: User Note -->
+        <div class="step" id="step7">
+            <div class="step-header">
+                <h1>User Note</h1>
+                <p class="sub-heading">Anything else you'd like to give context or inform about?</p>
+            </div>
+            <div class="content-container">
+                <div class="onboarding-card">
+                    <div class="input-wrapper" style="border-radius: 20px;">
+                        <input type="text" id="noteInput" placeholder="Anything else we should know?" autocomplete="off">
+                    </div>
+                    <button class="no-btn" id="noNoteBtn">No, that's all</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const avatars = [
+  // --- Original Fruits ---
+  '🍎', '🍐', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🫐', '🍈', '🍒', '🍑', '🥭', '🍍', '🥥', '🥝', 
+  '👻', '💀', '👽', '🤖', '👺', '👹', '🧛', '🧙', '🧟', '🎃',
+  '🛸', '🚀', '🪐', '☄️', '🌟', '🍄', '🌵', '🌴', '🌊', '🔥','😂','😏','🙂','😎', 
+  '🐉', '🐙', '🦄', '🐝', '🦊', '🦉'
+];        
+        const goalData = {
+            "Balance": "Maintain steady energy and eating habits throughout the day.",
+            "Feather": "Feel lighter and more comfortable. Ideal for weight management.",
+            "Zeal": "Stay active and energized. Designed for high performance.",
+            "Ease": "Improve digestion and comfort after eating.",
+            "Restore": "Support recovery and metabolic reset."
+        };
+        const dietData = {
+            "Vegetarian": "Plant-forward but includes dairy and eggs.",
+            "Non-Vegetarian": "Includes poultry, meat, and fish.",
+            "Vegan": "Strictly plant-based. No animal products.",
+            "Pescatarian": "Vegetarian with the inclusion of seafood.",
+            "Keto": "High-fat, low-carb focus.",
+            "Paleo": "Whole foods, lean meats, and vegetables."
+        };
+
+        const steps = [
+            document.getElementById('step1'), 
+            document.getElementById('step2'), 
+            document.getElementById('step3'), 
+            document.getElementById('step4'), 
+            document.getElementById('step5'),
+            document.getElementById('step6'),
+            document.getElementById('step7')
+        ];
+        const nextBtn = document.getElementById('globalNext');
+        const prevBtn = document.getElementById('prevBtn');
+        const customAlert = document.getElementById('customAlert');
+        const foodGrid = document.getElementById('foodGrid');
+        const allergyInput = document.getElementById('allergyInput');
+        const noteInput = document.getElementById('noteInput');
+        
+        let currentStep = 0;
+        let selectedGoal = null;
+        let selectedDiet = null;
+        let selectedFoods = [];
+        let fetchedMeals = [];
+
+        function showAlert(message) {
+            customAlert.textContent = message;
+            customAlert.style.display = 'block';
+            setTimeout(() => { customAlert.style.display = 'none'; }, 3000);
+        }
+
+        function updateStep(index) {
+            steps.forEach((s, i) => s.classList.toggle('active', i === index));
+            prevBtn.style.display = index === 0 ? 'none' : 'block';
+            nextBtn.textContent = index === steps.length - 1 ? 'Finish' : 'Next';
+            currentStep = index;
+        }
+
+        async function fetchMeals() {
+            const data = {
+                name: document.getElementById('nameInput').value,
+                weight: document.getElementById('weightInput').value,
+                height: document.getElementById('heightInput').value,
+                dob: document.getElementById('dobInput').value,
+                goal: selectedGoal,
+                dietaryPreference: selectedDiet
+            };
+
+            nextBtn.disabled = true;
+            nextBtn.innerHTML = 'Fetching... <span class="loading-spinner"></span>';
+
+            try {
+                const response = await fetch('/predict-meals', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    const errorBody = await response.text();
+                    console.error('Fetch error:', response.status, errorBody);
+                    showAlert(`Error: Server returned ${response.status}`);
+                    return;
+                }
+
+                const result = await response.json();
+                if (result.success && result.meals) {
+                    fetchedMeals = result.meals;
+                    renderFoodGrid();
+                    updateStep(4);
+                } else {
+                    showAlert("Failed to load meal predictions.");
+                }
+            } catch (e) {
+                console.error(e);
+                showAlert("Error connecting to server.");
+            } finally {
+                nextBtn.disabled = false;
+                nextBtn.innerHTML = 'Next';
+            }
+        }
+
+        function renderFoodGrid() {
+            foodGrid.innerHTML = '';
+            fetchedMeals.forEach((meal) => {
+                const box = document.createElement('div');
+                box.className = 'selection-box';
+                box.style.width = '240px'; 
+                box.textContent = meal.name;
+                
+                box.addEventListener('mouseenter', () => {
+                    document.getElementById('foodTitle').textContent = meal.name;
+                    document.getElementById('foodDesc').textContent = meal.description || "Fresh meal tailored for your goal.";
+                    document.getElementById('foodStats').textContent = `Approx. ${meal.calories} Calories`;
+                });
+
+                box.addEventListener('click', () => {
+                    if (selectedFoods.includes(meal.name)) {
+                        selectedFoods = selectedFoods.filter(f => f !== meal.name);
+                        box.classList.remove('selected');
+                    } else if (selectedFoods.length < 5) {
+                        selectedFoods.push(meal.name);
+                        box.classList.add('selected');
+                    } else {
+                        showAlert("You can select up to 5 foods.");
+                    }
+                });
+                foodGrid.appendChild(box);
+            });
+        }
+
+        async function submitOnboarding() {
+            // Retrieve user_id from localStorage
+            const userId = localStorage.getItem('user_id');
+            const userName=localStorage.setItem('user_name',document.getElementById('nameInput').value);
+            const finalData = {
+                user_id: userId, // Added as requested
+                name: document.getElementById('nameInput').value,
+                weight: document.getElementById('weightInput').value,
+                height: document.getElementById('heightInput').value,
+                dob: document.getElementById('dobInput').value,
+                goal: selectedGoal,
+                dietaryPreference: selectedDiet,
+                selectedRegularFoods: selectedFoods,
+                allergies: allergyInput.value,
+                userNote: noteInput.value
+            };
+
+            nextBtn.disabled = true;
+            nextBtn.innerHTML = 'Saving... <span class="loading-spinner"></span>';
+
+            try {
+                const response = await fetch('/api/finish-onboarding', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(finalData)
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    window.location.href = '/home';
+                } else {
+                    console.log()
+                    console.log('Submission failed:', result.message);
+                }
+            } catch (e) {
+                console.error('Submission error:', e);
+                
+            }
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (currentStep === 0 && !document.getElementById('nameInput').value.trim()) return showAlert("Enter your name.");
+            if (currentStep === 1) {
+                if (!document.getElementById('weightInput').value || !document.getElementById('heightInput').value || !document.getElementById('dobInput').value)
+                    return showAlert("Please fill all details.");
+            }
+            if (currentStep === 2 && !selectedGoal) return showAlert("Pick a goal.");
+            if (currentStep === 3 && !selectedDiet) return showAlert("Pick a diet.");
+            if (currentStep === 4 && selectedFoods.length === 0) return showAlert("Select at least 1 food.");
+            if (currentStep === 5 && !allergyInput.value.trim()) return showAlert("Please specify allergies or click 'No'.");
+            if (currentStep === 6 && !noteInput.value.trim()) return showAlert("Please add a note or click 'No'.");
+
+            if (currentStep === 3) {
+                fetchMeals();
+            } else if (currentStep < steps.length - 1) {
+                updateStep(currentStep + 1);
+            } else {
+                submitOnboarding();
+            }
+        });
+
+        document.getElementById('noAllergyBtn').addEventListener('click', () => {
+            allergyInput.value = "None";
+        });
+
+        document.getElementById('noNoteBtn').addEventListener('click', () => {
+            noteInput.value = "None";
+        });
+
+        prevBtn.addEventListener('click', () => { if (currentStep > 0) updateStep(currentStep - 1); });
+
+        // Selection Logic
+        document.querySelectorAll('.goal-box').forEach(b => {
+            b.addEventListener('mouseenter', () => {
+                document.getElementById('goalTitle').textContent = b.dataset.value;
+                document.getElementById('goalDesc').textContent = goalData[b.dataset.value];
+            });
+            b.addEventListener('click', () => {
+                document.querySelectorAll('.goal-box').forEach(el => el.classList.remove('selected'));
+                b.classList.add('selected');
+                selectedGoal = b.dataset.value;
+            });
+        });
+
+        document.querySelectorAll('.diet-box').forEach(b => {
+            b.addEventListener('mouseenter', () => {
+                document.getElementById('dietTitle').textContent = b.dataset.value;
+                document.getElementById('dietDesc').textContent = dietData[b.dataset.value];
+            });
+            b.addEventListener('click', () => {
+                document.querySelectorAll('.diet-box').forEach(el => el.classList.remove('selected'));
+                b.classList.add('selected');
+                selectedDiet = b.dataset.value;
+            });
+        });
+
+        document.getElementById('nameInput').addEventListener('input', (e) => {
+            document.getElementById('avatarIcon').textContent = e.target.value ? avatars[e.target.value.length % avatars.length] : '👤';
+        });
+    </script>
+</body>
+</html>
