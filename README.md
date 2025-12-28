@@ -87,6 +87,12 @@ _The agent’s role is not to control the user, but to adapt to them._
 - No forced notifications or intrusive interventions
 - Operates only within user-provided data
 
+**The Correction Loop**
+- We start with the Health score with basic 6 questions. Those 6 questions are tied to 6 different weights which play a role in final determination.
+- We use calories, outside/inside food ratio and combine it with the above - to derive the health score.
+- The health score is then added into the database
+- There are various goals which users can choose from, and each health score is basically a difference (or delta) from that goal, and hence we use that to reprompt the questions such that it is psycologically more likely that user moves towards the goal. 
+
 ## Demonstration of Agentic Behavior
 
 Example:
